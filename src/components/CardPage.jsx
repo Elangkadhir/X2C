@@ -43,7 +43,7 @@ function CardPage() {
 
       if (yOffset + pdfHeight > pdf.internal.pageSize.getHeight()) {
         pdf.addPage();
-        yOffset = 10;
+        yOffset = 20;
       }
 
       // Capture the map section separately to get its position
@@ -72,81 +72,14 @@ function CardPage() {
       pdf.link(mapX, mapY, mapWidth, mapHeight, {
         url: `https://www.google.com/maps/search/?api=1&query=${row.lat},${row.long}`,
       });
-
       yOffset += pdfHeight + 10;
     }
 
-    pdf.save("download.pdf");
+    pdf.save("Aasthi.pdf");
   };
 
   return (
-    <div ref={printRef}>
-      <section
-        ref={customerNameRef}
-        className="home w-screen h-screen"
-      >
-        <div className="text-slate-800 text-5xl font-bold pt-20 pl-20">
-          Property Details for
-        </div>
-        <div className="text-white text-5xl font-bold pt-4 pl-20">
-          {customerName}
-        </div>
-      </section>
-      {selectedRows.map((row, index) => (
-        <section
-          id={`printSection${row.sno}`}
-          key={index}
-          className="home w-screen h-screen bg-green-500 mt-10 items-center px-10"
-        >
-          <div className="text-3xl font-bold mb-5">
-            {row.areaName}
-            {row["Land Size"] && ` (${row["Land Size"]})`}
-          </div>
-          <div className="container mx-auto flex flex-row items-stretch w-full pt-5">
-            <div className="w-1/2 flex items-center justify-center relative">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${row.lat},${row.long}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img
-                  src={map}
-                  alt="Map"
-                  className="w-[75%] h-full object-cover rounded-lg shadow-lg"
-                />
-                <div className="absolute bottom-[50%] left-[20%] flex items-center gap-2 bg-black p-2 rounded">
-                  <IoLocationSharp className="text-red-600 text-5xl" />
-                  <div className="font-bold text-2xl text-white">
-                    {row.areaName}
-                  </div>
-                </div>
-              </a>
-            </div>
-            <div className="w-1/2 flex items-center justify-center">
-              <table className="table-fixed w-full h-full bg-white shadow-lg rounded-lg">
-                <tbody className="flex flex-col w-full">
-                  {Object.entries(row)
-                    .filter(
-                      ([key]) =>
-                        !["sno", "lat", "long", "areaName"].includes(key)
-                    )
-                    .map(([key, value]) => (
-                      <tr
-                        key={key}
-                        className="border w-full bg-gradient-to-r from-red-400 to-blue-500 flex"
-                      >
-                        <td className="px-2 py-2 font-bold w-[30%]">{key}</td>
-                        <td className="bg-gradient-to-r from-blue-400 to-red-500 px-4 py-2 w-[70%]">
-                          {value}
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-      ))}
+    <>
       <div className="flex justify-center mt-10">
         <button
           onClick={handleDownload}
@@ -155,7 +88,72 @@ function CardPage() {
           Download
         </button>
       </div>
-    </div>
+      <div ref={printRef}>
+        <section ref={customerNameRef} className="home w-screen h-screen">
+          <div className="text-slate-800 text-5xl font-bold pt-20 pl-20">
+            Property Details for
+          </div>
+          <div className="text-white text-5xl font-bold pt-4 pl-20">
+            {customerName}
+          </div>
+        </section>
+        {selectedRows.map((row, index) => (
+          <section
+            id={`printSection${row.sno}`}
+            key={index}
+            className="home w-screen h-screen bg-green-500 mt-10 items-center px-10"
+          >
+            <div className="text-3xl font-bold mb-5">
+              {row.areaName}
+              {row["Land Size"] && ` (${row["Land Size"]})`}
+            </div>
+            <div className="container mx-auto flex flex-row items-stretch w-full pt-5">
+              <div className="w-1/2 flex items-center justify-center relative">
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${row.lat},${row.long}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img
+                    src={map}
+                    alt="Map"
+                    className="w-[75%] h-full object-cover rounded-lg shadow-lg"
+                  />
+                  <div className="absolute bottom-[50%] left-[20%] flex items-center gap-2 bg-black p-2 rounded">
+                    <IoLocationSharp className="text-red-600 text-5xl" />
+                    <div className="font-bold text-2xl text-white">
+                      {row.areaName}
+                    </div>
+                  </div>
+                </a>
+              </div>
+              <div className="w-1/2 flex items-center justify-center">
+                <table className="table-fixed w-full h-full bg-white shadow-lg rounded-lg">
+                  <tbody className="flex flex-col w-full">
+                    {Object.entries(row)
+                      .filter(
+                        ([key]) =>
+                          !["sno", "lat", "long", "areaName"].includes(key)
+                      )
+                      .map(([key, value]) => (
+                        <tr
+                          key={key}
+                          className="border w-full bg-gradient-to-r from-red-400 to-blue-500 flex"
+                        >
+                          <td className="px-2 py-2 font-bold w-[30%]">{key}</td>
+                          <td className="bg-gradient-to-r from-blue-400 to-red-500 px-4 py-2 w-[70%]">
+                            {value}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        ))}
+      </div>
+    </>
   );
 }
 
